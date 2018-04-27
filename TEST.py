@@ -3,11 +3,11 @@ import time
 import random
 if __name__=="__main__":
     driver = webdriver.Chrome('./chromedriver')
-    for qwweqweqweqwe in range(500):
+    for qwweqweqweqwe in range(300):
         print(qwweqweqweqwe, "번째 사람중 .. ")
         driver.get(
             'https://docs.google.com/forms/d/e/1FAIpQLSfrP2qAshSjLMPzfdzQhF9FAwZLHGAGIVk8xj9nVQ229uwHTw/viewform')
-        time.sleep(5)
+        time.sleep(2)
         lists = driver.find_elements_by_class_name('freebirdFormviewerViewItemsItemItem')
         answerList = []
         age = ''
@@ -27,7 +27,7 @@ if __name__=="__main__":
         age = result
         ###2
         tmp = random.randint(0, 100000) % 100
-        if tmp <= 50:
+        if tmp <= 5:
             result = 0
         else:
             result = 1
@@ -86,7 +86,7 @@ if __name__=="__main__":
         answerList.append(result)
         ###6
         tmp = random.randint(0, 100000) % 100
-        if tmp <= 40:
+        if tmp <= 20:
             result = 0
         else:
             result = 1
@@ -103,7 +103,7 @@ if __name__=="__main__":
             tmp = random.randint(0, 100000) % 100
             if tmp <= 10:
                 result = 0
-            elif tmp <= 50:
+            elif tmp <= 70:
                 result = 1
             else:
                 result = 2
@@ -137,7 +137,7 @@ if __name__=="__main__":
         answerList.append(result)
         ###11
         tmp = random.randint(0, 100000) % 100
-        if tmp <= 10:
+        if tmp <= 30:
             result = 0
         else:
             result = 1
@@ -147,11 +147,11 @@ if __name__=="__main__":
             tmp = random.randint(0, 100000) % 100
             if tmp <= 50:
                 result = 0
-            elif tmp <= 60:
+            elif tmp <= 70:
                 result = 1
-            elif tmp <= 75:
+            elif tmp <= 85:
                 result = 2
-            elif tmp <= 80:
+            elif tmp <= 95:
                 result = 3
             else:
                 result = 4
@@ -160,9 +160,9 @@ if __name__=="__main__":
         answerList.append(result)
         ###12
         tmp = random.randint(0, 100000) % 100
-        if tmp <= 40:
+        if tmp <= 90:
             result = 0
-        elif tmp <= 50:
+        elif tmp <= 95:
             result = 1
         else:
             result = 2
