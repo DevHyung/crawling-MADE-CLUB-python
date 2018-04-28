@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
+import json
+
 header = {
 'Cookie': "",
 'Upgrade-Insecure-Requests':'1',
@@ -17,12 +19,13 @@ def GetCookie():
     driver.find_element_by_xpath('//*[@id="btn_login"]').click()
     time.sleep(3)
     str = '__cfduid=' + driver.get_cookies()[0]['value'] + ';' + 'newsession=' + driver.get_cookies()[1]['value']
-    driver.quit()
+    #driver.quit()
     return str
 if __name__=="__main__":
     saveCookie = open('SESSION.txt').read()
     header['Cookie'] = saveCookie
     html = requests.get('http://made-club.com/game/result?type=sport&page=240', headers=header)
+    jsonList = []
     if '<!-- 신규 가입시 환영 메세지 얼럿 --->' in html.text: # 세션끊긴거
         print('>>> Session Re Get .. ')
         cookie = GetCookie()
@@ -35,9 +38,9 @@ if __name__=="__main__":
     table = bs4.find('table',id='gameListTable')
     trs = table.find_all('tr')
     for tr in trs:
+        data = {}
         try:
             league = tr.find('th').get_text().strip()
-            #print(league)
         except:
             pass
         try:
@@ -49,16 +52,18 @@ if __name__=="__main__":
             drawRatio = tr.find_all('td')[4]['data-odds']
             awayRatio = tr.find_all('td')[5]['data-odds']
             awayTeam = tr.find_all('td')[5]['data-team']
-            print('{')
-            print('"League":"',league,'",')
-            print('"DateTime":"',tc,'",')
-            print('"LeagueType":"',leagueType,'",')
-            print('"HomeTeam":"',homeTeam,'",')
-            print('"HomeRatio":"',homeRatio,'",')
-            print('"DrawRatio":"',drawRatio,'",')
-            print('"AwayRatio":"',awayRatio,'",')
-            print('"data-ts":"',ts,'",')
-            print('},')
+            data["League"] = league
+            data["DateTime"] = tc
+            data["LeagueType"] = leagueType
+            data["HomeTeam"] = homeTeam
+            data["HomeRatio"] = homeRatio
+            data["DrawRatio"] = drawRatio
+            data["AwayRatio"] = awayRatio
+            data["data-ts"] = ts
+            jsonList.append(data)
         except:
             pass
+    f = open('JSON.txt','w',encoding='utf8')
+    f.write(json.dumps(jsonList, ensure_ascii=False))
+    print(json.dumps(jsonList, ensure_ascii=False))
 
