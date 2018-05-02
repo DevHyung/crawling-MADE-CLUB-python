@@ -41,7 +41,7 @@ if __name__=="__main__":
             header['Cookie'] = cookie
 
         #경기결과1
-        print('>>> RESULT1 시작')
+        #print('>>> RESULT1 시작')
         jsonList = []
         jsonList.clear()
         page = '&page='
@@ -90,7 +90,7 @@ if __name__=="__main__":
                     pass
         root['result1'] = jsonList
         # 경기결과2
-        print('>>> RESULT2 시작')
+        #print('>>> RESULT2 시작')
         jsonList = []
         jsonList.clear()
         page = '&page='
@@ -139,7 +139,7 @@ if __name__=="__main__":
                     pass
         root['result2'] = jsonList
         # 경기결과3
-        print('>>> RESULT3 시작')
+        #print('>>> RESULT3 시작')
         jsonList = []
         jsonList.clear()
         page = '&page='
@@ -188,7 +188,7 @@ if __name__=="__main__":
                     pass
         root['result3'] = jsonList
         # 크로스경기
-        print('>>> 크로스 시작')
+        #print('>>> 크로스 시작')
         jsonList = []
         jsonList.clear()
         html = requests.get('http://made-club.com/sports/cross', headers=header)
@@ -227,7 +227,7 @@ if __name__=="__main__":
         root['cross'] = jsonList
 
         # 실시간
-        print('>>> 실시간 시작')
+        #print('>>> 실시간 시작')
         html = requests.get('http://made-club.com/sports/live', headers=header)
         bs4 = BeautifulSoup(html.text, 'lxml')
         table = bs4.find('table', id='gameListTable')
@@ -265,7 +265,6 @@ if __name__=="__main__":
                 pass
         root['live'] = jsonList
         # 스페셜
-        print('>>> 스페셜 시작')
         html = requests.get('http://made-club.com/sports/special', headers=header)
         bs4 = BeautifulSoup(html.text, 'lxml')
         table = bs4.find('table', id='gameListTable')
@@ -302,11 +301,9 @@ if __name__=="__main__":
             except:
                 pass
         root['special'] = jsonList
-
-        f = open('JSON.txt', 'w', encoding='utf8')
-        f.write(json.dumps(root, ensure_ascii=False))
+        #f = open('JSON.txt', 'w', encoding='utf8')
+        #f.write(json.dumps(root, ensure_ascii=False))
         print(json.dumps(root, ensure_ascii=False))
-        print('>>> ',DELAY,'초후 다시시작')
         time.sleep(DELAY)
 
 
