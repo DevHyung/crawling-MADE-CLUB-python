@@ -4,6 +4,38 @@ from selenium import webdriver
 import time
 import json
 
+
+class SmartPhone:
+    def __init__(self, maker="", model="", spec=[], price=0.0):
+        self.Maker = maker
+        self.Model = model
+        self.Spec = spec[:]
+        self.Price = price
+
+    def __str__(self):
+        str1 = "--------\n"
+        str1 += " Maker: "
+        str1 += self.Maker + "\n"
+        str1 += " Model: "
+        str1 += self.Model + "\n"
+        str1 += " Spec: \n"
+        for item in self.Spec:
+            str1 += "   " + item + "\n"
+        str1 += " Price: "
+        str1 += str(self.Price) + "\n"
+        str1 += "--------\n"
+
+        return str1
+
+    def setInfo(self, maker="", model="", spec=[], price=0.0):
+        self.Maker = maker
+        self.Model = model
+        self.Spec = ""
+        self.Price = price
+
+    def addSpec(self, spec):
+        self.Spec += spec
+
 header = {
 'Cookie': "",
 'Upgrade-Insecure-Requests':'1',
@@ -13,14 +45,15 @@ header = {
 }
 def GetCookie():
     driver = webdriver.Chrome('./chromedriver')
-    driver.get('http://made-club.com/login')
+    driver.get('https://made-club.com/login')
+    time.sleep(3)
     driver.find_element_by_xpath('//*[@id="loginFrm"]/div[1]/input').send_keys(ID)
     driver.find_element_by_xpath('//*[@id="loginFrm"]/div[2]/input').send_keys(PW)
     driver.find_element_by_xpath('//*[@id="btn_login"]').click()
     time.sleep(3)
-    str = '__cfduid=' + driver.get_cookies()[0]['value'] + ';' + 'newsession=' + driver.get_cookies()[1]['value']
+    tmpstr = '__cfduid=' + driver.get_cookies()[0]['value'] + ';' + 'newsession=' + driver.get_cookies()[1]['value']
     driver.quit()
-    return str
+    return tmpstr
 if __name__=="__main__":
     configLines = open('CONFIG.txt').readlines()
     ID = configLines[0].split(':')[1].strip()
@@ -31,13 +64,14 @@ if __name__=="__main__":
         s = "%02d/%02d" % (now.tm_mon, now.tm_mday)
         saveCookie = open('SESSION.txt').read()
         header['Cookie'] = saveCookie
-        html = requests.get('http://made-club.com/sports/cross', headers=header)
+        html = requests.get('https://made-club.com/sports/cross', headers=header)
         root = {}
         if '<!-- 신규 가입시 환영 메세지 얼럿 --->' in html.text: # 세션끊긴거
             print('>>> Session Re Get .. ')
             cookie = GetCookie()
             f = open('SESSION.txt', 'w')
             f.write(cookie)
+            f.close()
             header['Cookie'] = cookie
 
         #경기결과1
@@ -46,7 +80,7 @@ if __name__=="__main__":
         jsonList.clear()
         page = '&page='
         pageIdx = 0
-        url = 'http://made-club.com/game/result?type=sport'
+        url = 'https://made-club.com/game/result?type=sport'
         LoopGo = True
         while LoopGo:
             if pageIdx == 0:
@@ -95,7 +129,7 @@ if __name__=="__main__":
         jsonList.clear()
         page = '&page='
         pageIdx = 0
-        url = 'http://made-club.com/game/result?type=special'
+        url = 'https://made-club.com/game/result?type=special'
         LoopGo = True
         while LoopGo:
             if pageIdx == 0:
@@ -144,7 +178,7 @@ if __name__=="__main__":
         jsonList.clear()
         page = '&page='
         pageIdx = 0
-        url = 'http://made-club.com/game/result?type=live'
+        url = 'https://made-club.com/game/result?type=live'
         LoopGo = True
         while LoopGo:
             if pageIdx == 0:
@@ -191,7 +225,7 @@ if __name__=="__main__":
         #print('>>> 크로스 시작')
         jsonList = []
         jsonList.clear()
-        html = requests.get('http://made-club.com/sports/cross', headers=header)
+        html = requests.get('https://made-club.com/sports/cross', headers=header)
         bs4 = BeautifulSoup(html.text, 'lxml')
         table = bs4.find('table',id='gameListTable')
         trs = table.find_all('tr')
@@ -228,7 +262,7 @@ if __name__=="__main__":
 
         # 실시간
         #print('>>> 실시간 시작')
-        html = requests.get('http://made-club.com/sports/live', headers=header)
+        html = requests.get('https://made-club.com/sports/live', headers=header)
         bs4 = BeautifulSoup(html.text, 'lxml')
         table = bs4.find('table', id='gameListTable')
         trs = table.find_all('tr')
@@ -265,7 +299,7 @@ if __name__=="__main__":
                 pass
         root['live'] = jsonList
         # 스페셜
-        html = requests.get('http://made-club.com/sports/special', headers=header)
+        html = requests.get('https://made-club.com/sports/special', headers=header)
         bs4 = BeautifulSoup(html.text, 'lxml')
         table = bs4.find('table', id='gameListTable')
         trs = table.find_all('tr')
