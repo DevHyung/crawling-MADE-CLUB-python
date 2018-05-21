@@ -1,3 +1,22 @@
+tmp = input()
+sum = 0
+isStart = False
+numstr = ''
+for ch in tmp:
+    if ch.isdigit():
+        if not isStart: # False일때
+            numstr +=  ch
+            isStart = True
+        elif isStart: # True 일떄
+            numstr += ch
+            isStart = False #두글짜니까
+        if len(numstr) == 2:
+
+            sum += int(numstr)
+            numstr = ''
+print(sum)
+
+exit(-1)
 import requests
 from bs4 import BeautifulSoup
 import time
